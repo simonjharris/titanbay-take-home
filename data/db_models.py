@@ -26,7 +26,7 @@ class Investor(Base):
     __tablename__ = "investors"
     name: Mapped[str]
     investor_type: Mapped[InvestorType]
-    email: Mapped[str]
+    email: Mapped[str] = mapped_column(unique=True)
 
 
 class Investment(Base):

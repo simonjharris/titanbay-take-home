@@ -12,7 +12,7 @@ from decimal import Decimal
 from enum import StrEnum
 from uuid import UUID
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 from data.types import FundStatus, InvestorType
 
@@ -28,6 +28,7 @@ class FundUpdate(FundCreate):
 
 
 class FundRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     id: UUID
     name: str
     vintage_year: int
@@ -43,6 +44,7 @@ class InvestorCreate(BaseModel):
 
 
 class InvestorRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     id: UUID
     name: str
     investor_type: InvestorType
@@ -57,6 +59,7 @@ class InvestmentCreate(BaseModel):
     investment_date: date
 
 class InvestmentRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     id: UUID
     investor_id: UUID
     fund_id: UUID

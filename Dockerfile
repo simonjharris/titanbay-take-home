@@ -6,4 +6,4 @@ COPY uv.lock pyproject.toml /app
 RUN uv sync --no-install-project
 COPY . /app
 EXPOSE 8000
-ENTRYPOINT ["uv", "run", "uvicorn", "main:app", "--host", "0.0.0.0"]
+CMD uv run alembic upgrade head && uv run uvicorn main:app --host 0.0.0.0
