@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from alembic import command
 from alembic.config import Config
+from sqlalchemy_utils import create_database, database_exists
 
 from data.database import get_db
 from main import app
@@ -19,6 +20,8 @@ TEST_DATABASE_URL = os.getenv(
 
 @pytest.fixture(scope="session", autouse=True)
 def run_migrations():
+    if not database_exists(TEST_DATABASE_URL):
+        create_database(TEST_DATABASE_URL)
     alembic_cfg = Config("alembic.ini")
     alembic_cfg.set_main_option("sqlalchemy.url", TEST_DATABASE_URL)
     command.upgrade(alembic_cfg, "head")
