@@ -14,8 +14,17 @@ from uuid import UUID
 
 from pydantic import BaseModel, EmailStr
 
+from data.types import FundStatus, InvestorType
 
 
+class FundCreate(BaseModel):
+    name: str
+    vintage_year: int
+    target_size_usd: Decimal
+    status: FundStatus
+
+class FundUpdate(FundCreate):
+    id: UUID
 
 
 class FundRead(BaseModel):
@@ -27,6 +36,12 @@ class FundRead(BaseModel):
     created_at: datetime
 
 
+class InvestorCreate(BaseModel):
+    name: str
+    investor_type: InvestorType
+    email: EmailStr
+
+
 class InvestorRead(BaseModel):
     id: UUID
     name: str
@@ -34,6 +49,12 @@ class InvestorRead(BaseModel):
     email: EmailStr
     created_at: datetime
 
+
+class InvestmentCreate(BaseModel):
+    investor_id: UUID
+    fund_id: UUID
+    amount_usd: Decimal
+    investment_date: date
 
 class InvestmentRead(BaseModel):
     id: UUID
