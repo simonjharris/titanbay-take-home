@@ -1,10 +1,21 @@
 services:
+  titanbay_backend:
+    build: .
+    networks:
+      - titanbay-network
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=dev
+    depends_on:
+      - database
+
+
   database:
     image: postgres:17-alpine
     volumes:
       - postgres-data:/var/lib/postgresql/data
     environment:
-      - ENV=dev
       - POSTGRES_USER=titanbay
       - POSTGRES_PASSWORD=titanbay
     ports:
