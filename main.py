@@ -10,4 +10,3 @@ app = FastAPI()
 app.include_router(fund_router)
 app.include_router(investments_router)
 app.include_router(investors_router)
-

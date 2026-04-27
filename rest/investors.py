@@ -21,4 +21,4 @@ async def create_investor(
     try:
         return investor_logic.create(db, investor)
     except ConflictError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e))

@@ -1,9 +1,8 @@
 import uuid
 from datetime import datetime, date
 from decimal import Decimal
-
-from sqlalchemy import func, Column, UUID, ForeignKey
-from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped
+from sqlalchemy import func, UUID, ForeignKey
+from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped, relationship
 
 from data.types import FundStatus, InvestorType
 
@@ -24,6 +23,7 @@ class Fund(Base):
     vintage_year: Mapped[int]
     target_size_usd: Mapped[Decimal]
     status: Mapped[FundStatus]
+    investments: Mapped[list["Investment"]] = relationship(back_populates="fund")
 
 
 class Investor(Base):
@@ -31,6 +31,7 @@ class Investor(Base):
     name: Mapped[str]
     investor_type: Mapped[InvestorType]
     email: Mapped[str] = mapped_column(unique=True)
+    investments: Mapped[list["Investment"]] = relationship(back_populates="investor")
 
 
 class Investment(Base):
@@ -43,3 +44,5 @@ class Investment(Base):
     )
     amount_usd: Mapped[Decimal]
     investment_date: Mapped[date]
+    fund: Mapped["Fund"] = relationship(back_populates="investments")
+    investor: Mapped["Investor"] = relationship(back_populates="investments")

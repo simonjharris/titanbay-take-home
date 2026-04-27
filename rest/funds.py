@@ -21,7 +21,7 @@ async def get_fund_by_id(fund_id: UUID, db: DatabaseSession) -> FundRead:
     try:
         return fund_logic.get_by_id(db, fund_id)
     except NotFoundError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
 
 @fund_router.post("/funds", status_code=status.HTTP_201_CREATED)
@@ -38,4 +38,4 @@ async def update_fund(fund: FundUpdate, db: DatabaseSession) -> FundRead:
     try:
         return fund_logic.update(db, fund)
     except NotFoundError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))

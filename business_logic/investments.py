@@ -17,7 +17,9 @@ def get_for_fund(db: Session, fund_id: UUID) -> list[InvestmentRead]:
         .scalars()
         .all()
     )
-    return TypeAdapter(list[InvestmentRead]).validate_python(investments, from_attributes=True)
+    return TypeAdapter(list[InvestmentRead]).validate_python(
+        investments, from_attributes=True
+    )
 
 
 def create(db: Session, fund_id: UUID, data: InvestmentCreate) -> InvestmentRead:

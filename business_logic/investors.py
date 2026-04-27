@@ -10,7 +10,9 @@ from exceptions import ConflictError
 
 def get_all(db: Session) -> list[InvestorRead]:
     investors = db.execute(select(Investor)).scalars().all()
-    return TypeAdapter(list[InvestorRead]).validate_python(investors, from_attributes=True)
+    return TypeAdapter(list[InvestorRead]).validate_python(
+        investors, from_attributes=True
+    )
 
 
 def create(db: Session, data: InvestorCreate) -> InvestorRead:

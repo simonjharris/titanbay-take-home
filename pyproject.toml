@@ -18,6 +18,13 @@ dependencies = [
 testpaths = ["tests"]
 pythonpath = ["."]
 
+[tool.coverage.run]
+omit = [
+  "tests/*",
+  "alembic/*",
+  "*/migrations/*",
+]
+
 [tool.mypy]
 strict=true
 

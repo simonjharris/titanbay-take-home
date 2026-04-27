@@ -28,13 +28,14 @@ class FundUpdate(FundCreate):
 
 
 class FundRead(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
     id: UUID
     name: str
     vintage_year: int
     target_size_usd: Decimal
     status: FundStatus
     created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class InvestorCreate(BaseModel):
@@ -44,25 +45,26 @@ class InvestorCreate(BaseModel):
 
 
 class InvestorRead(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
     id: UUID
     name: str
     investor_type: InvestorType
     email: EmailStr
     created_at: datetime
 
+    model_config = ConfigDict(from_attributes=True)
+
 
 class InvestmentCreate(BaseModel):
     investor_id: UUID
-    fund_id: UUID
     amount_usd: Decimal
     investment_date: date
 
 
 class InvestmentRead(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
     id: UUID
     investor_id: UUID
     fund_id: UUID
     amount_usd: Decimal
     investment_date: date
+
+    model_config = ConfigDict(from_attributes=True)

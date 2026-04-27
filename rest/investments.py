@@ -18,7 +18,7 @@ async def get_investments_for_fund(
     try:
         return investment_logic.get_for_fund(db, fund_id)
     except NotFoundError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
 
 @investments_router.post(
@@ -32,4 +32,4 @@ async def create_investment_for_fund(
     try:
         return investment_logic.create(db, fund_id, investment_data)
     except NotFoundError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
