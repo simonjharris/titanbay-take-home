@@ -3,6 +3,7 @@ from datetime import date
 from decimal import Decimal
 from typing import Any
 
+import pytest
 from fastapi import status
 from sqlalchemy.orm import Session
 from starlette.testclient import TestClient
@@ -164,3 +165,22 @@ def test_create_investment_investor_not_found_returns_404(
         f"/funds/{fund.id}/investments", json=payload.model_dump(mode="json")
     )
     assert res.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.mark.parametrize("fund_status", [FundStatus.INVESTING, FundStatus.CLOSED])
+def test_create_investment_non_fundraising_fund_returns_409(
+    test_client: TestClient, database_session: Session, fund_status: FundStatus
+) -> None:
+    fund = _make_fund(database_session, status=fund_status)
+    investor = _make_investor(database_session)
+    database_session.flush()
+
+    payload = InvestmentCreate(
+        investor_id=investor.id,
+        amount_usd=Decimal("100000.00"),
+        investment_date=date(2024, 1, 1),
+    )
+    res = test_client.post(
+        f"/funds/{fund.id}/investments", json=payload.model_dump(mode="json")
+    )
+    assert res.status_code == status.HTTP_409_CONFLICT

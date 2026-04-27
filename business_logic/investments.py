@@ -6,7 +6,10 @@ from sqlalchemy.orm import Session
 
 from data.data_schemas import InvestmentCreate, InvestmentRead
 from data.db_models import Fund, Investor, Investment
-from exceptions import NotFoundError
+from data.types import FundStatus
+from exceptions import ConflictError, NotFoundError
+
+ACCEPTING_INVESTMENT_STATUSES: frozenset[FundStatus] = frozenset({FundStatus.FUNDRAISING})
 
 
 def get_for_fund(db: Session, fund_id: UUID) -> list[InvestmentRead]:
@@ -23,8 +26,13 @@ def get_for_fund(db: Session, fund_id: UUID) -> list[InvestmentRead]:
 
 
 def create(db: Session, fund_id: UUID, data: InvestmentCreate) -> InvestmentRead:
-    if db.get(Fund, fund_id) is None:
+    fund = db.get(Fund, fund_id)
+    if fund is None:
         raise NotFoundError("Fund")
+    if fund.status not in ACCEPTING_INVESTMENT_STATUSES:
+        raise ConflictError(
+            f"Fund is not accepting investments (status: {fund.status})"
+        )
     if db.get(Investor, data.investor_id) is None:
         raise NotFoundError("Investor")
     investment_data = data.model_dump()
