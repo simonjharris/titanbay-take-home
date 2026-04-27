@@ -1,13 +1,14 @@
 import os
+from typing import Generator
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, Engine
 from sqlalchemy.orm import Session
 
 from alembic import command
 from alembic.config import Config
-from sqlalchemy_utils import create_database, database_exists
+from sqlalchemy_utils import create_database, database_exists  # type: ignore[import-untyped]
 
 from data.database import get_db
 from main import app
@@ -19,7 +20,7 @@ TEST_DATABASE_URL = os.getenv(
 
 
 @pytest.fixture(scope="session", autouse=True)
-def run_migrations():
+def run_migrations() -> None:
     if not database_exists(TEST_DATABASE_URL):
         create_database(TEST_DATABASE_URL)
     alembic_cfg = Config("alembic.ini")
@@ -28,12 +29,12 @@ def run_migrations():
 
 
 @pytest.fixture(scope="session")
-def engine(run_migrations):
+def engine(run_migrations: None) -> Engine:
     return create_engine(TEST_DATABASE_URL)
 
 
 @pytest.fixture()
-def db(engine):
+def database_session(engine: Engine) -> Generator[Session, None, None]:
     with engine.connect() as conn:
         transaction = conn.begin()
         session = Session(bind=conn, join_transaction_mode="create_savepoint")
@@ -43,7 +44,7 @@ def db(engine):
 
 
 @pytest.fixture()
-def client(db):
-    app.dependency_overrides[get_db] = lambda: db
+def test_client(database_session: Session) -> Generator[TestClient, None, None]:
+    app.dependency_overrides[get_db] = lambda: database_session
     yield TestClient(app)
     app.dependency_overrides.clear()

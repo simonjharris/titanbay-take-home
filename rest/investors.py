@@ -15,7 +15,9 @@ async def get_investors(db: DatabaseSession) -> list[InvestorRead]:
 
 
 @investors_router.post("/investors", status_code=status.HTTP_201_CREATED)
-async def create_investor(investor: InvestorCreate, db: DatabaseSession) -> InvestorRead:
+async def create_investor(
+    investor: InvestorCreate, db: DatabaseSession
+) -> InvestorRead:
     try:
         return investor_logic.create(db, investor)
     except ConflictError as e:

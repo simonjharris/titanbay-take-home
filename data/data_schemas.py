@@ -9,7 +9,6 @@
 #
 from datetime import datetime, date
 from decimal import Decimal
-from enum import StrEnum
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, EmailStr
@@ -22,6 +21,7 @@ class FundCreate(BaseModel):
     vintage_year: int
     target_size_usd: Decimal
     status: FundStatus
+
 
 class FundUpdate(FundCreate):
     id: UUID
@@ -57,6 +57,7 @@ class InvestmentCreate(BaseModel):
     fund_id: UUID
     amount_usd: Decimal
     investment_date: date
+
 
 class InvestmentRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
