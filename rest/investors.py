@@ -1,3 +1,5 @@
+from typing import Any
+
 from fastapi import APIRouter, HTTPException
 from starlette import status
 
@@ -8,7 +10,12 @@ import business_logic.investors as investor_logic
 
 investors_router = APIRouter(tags=["investors"])
 
-_409 = {409: {"model": ErrorDetail, "description": "An investor with this email already exists"}}
+_409: dict[int | str, dict[str, Any]] = {
+    409: {
+        "model": ErrorDetail,
+        "description": "An investor with this email already exists",
+    }
+}
 
 
 @investors_router.get(

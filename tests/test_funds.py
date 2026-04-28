@@ -83,7 +83,9 @@ def test_get_fund_by_id_does_not_exist_returns_404(
 
 def test_update_fund(test_client: TestClient, database_session: Session) -> None:
     fund_id = uuid.uuid4()
-    database_session.add(_make_fund(id=fund_id, name="Old Name", status=FundStatus.FUNDRAISING))
+    database_session.add(
+        _make_fund(id=fund_id, name="Old Name", status=FundStatus.FUNDRAISING)
+    )
     database_session.flush()
 
     payload = FundUpdate(

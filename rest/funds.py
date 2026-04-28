@@ -1,3 +1,4 @@
+from typing import Any
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException
@@ -10,7 +11,7 @@ import business_logic.funds as fund_logic
 
 fund_router = APIRouter(tags=["funds"])
 
-_404 = {404: {"model": ErrorDetail, "description": "Fund not found"}}
+_404: dict[int | str, dict[str, Any]] = {404: {"model": ErrorDetail, "description": "Fund not found"}}
 
 
 @fund_router.get(

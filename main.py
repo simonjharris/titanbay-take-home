@@ -1,6 +1,5 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
-from sqlalchemy import JSON
 
 from rest.funds import fund_router
 from rest.investments import investments_router
@@ -11,6 +10,7 @@ app = FastAPI(
     description="API for managing investment funds, investors, and investments.",
     version="1.0.0",
 )
+
 
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:

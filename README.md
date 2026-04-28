@@ -67,8 +67,11 @@ Interactive docs available at:
 
 ---
 
+## Formatting, Linting and Type Checking
+
+
 ## Testing
-Testing also requires a postgres database to be running with the TEST_DATABASE_URL 
+Testing also requires a postgres database to be running with the TEST_DATABASE_URL environment set. This has a default set in `config.py` which may or may not be appropriate depending on how the database is running. This can be overridden in a `.env` file as per the `.env.example`.
 
 ```shell
 uv run pytest --cov
@@ -78,10 +81,20 @@ uv run pytest --cov
 
 ## Design Decisions & Assumptions
 
-[...]
+Data models and routes were set up according to the provided [api spec](https://storage.googleapis.com/interview-api-doc-funds.wearebusy.engineering/index.html).
+
+Additional data validation requirements were identified.
+
+ - An investment can only be created in a fund if the fund status is "Fundraising".
+ - A unique constraint was added to the `email` field on the `investors` table, meaning multiple investors can't share an email address.
+
+The logic of these rules should be checked to see if that is the desired behaviour. Additional data validation requirements may exist, but require product input.
 
 ---
 
 ## AI Usage
 
-[...]
+The general project outline and endpoint stubs were created by hand using previous projects as a guide to enable quick set up of docker and testing setups. The `/funds` endpoints were mostly created by hand as a template for AI to follow to create the others.
+
+Most of the business logic was written by AI, with a few iterations around better controlling the database transaction through the HTTP request lifecycle. 
+Most of the tests were written by AI, after a few written by hand as a template.

@@ -40,7 +40,9 @@ def _make_investor(database_session: Session, **kwargs: Any) -> Investor:
     return investor
 
 
-def _make_investment(database_session: Session, fund: Fund, investor: Investor, **kwargs: Any) -> Investment:
+def _make_investment(
+    database_session: Session, fund: Fund, investor: Investor, **kwargs: Any
+) -> Investment:
     defaults: dict[str, Any] = dict(
         id=uuid.uuid4(),
         fund_id=fund.id,
@@ -71,8 +73,12 @@ def test_get_investments_for_fund_returns_only_that_funds_investments(
     fund_a = _make_fund(database_session, name="Fund A")
     fund_b = _make_fund(database_session, name="Fund B")
     investor = _make_investor(database_session)
-    investment_a = _make_investment(database_session, fund_a, investor, amount_usd=Decimal("100000.00"))
-    _make_investment(database_session, fund_b, investor, amount_usd=Decimal("200000.00"))
+    investment_a = _make_investment(
+        database_session, fund_a, investor, amount_usd=Decimal("100000.00")
+    )
+    _make_investment(
+        database_session, fund_b, investor, amount_usd=Decimal("200000.00")
+    )
     database_session.flush()
 
     res = test_client.get(f"/funds/{fund_a.id}/investments")

@@ -9,7 +9,9 @@ from data.db_models import Fund, Investor, Investment
 from data.types import FundStatus
 from exceptions import ConflictError, NotFoundError
 
-ACCEPTING_INVESTMENT_STATUSES: frozenset[FundStatus] = frozenset({FundStatus.FUNDRAISING})
+ACCEPTING_INVESTMENT_STATUSES: frozenset[FundStatus] = frozenset(
+    {FundStatus.FUNDRAISING}
+)
 
 
 def get_for_fund(db: Session, fund_id: UUID) -> list[InvestmentRead]:

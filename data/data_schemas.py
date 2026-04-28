@@ -15,7 +15,9 @@ class FundCreate(BaseModel):
     name: str = Field(description="Name of the fund")
     vintage_year: int = Field(description="Year the fund was established")
     target_size_usd: Decimal = Field(description="Target fundraising size in USD")
-    status: FundStatus = Field(description="Current fund status: Fundraising, Investing, or Closed")
+    status: FundStatus = Field(
+        description="Current fund status: Fundraising, Investing, or Closed"
+    )
 
 
 class FundUpdate(FundCreate):
@@ -27,7 +29,9 @@ class FundRead(BaseModel):
     name: str = Field(description="Name of the fund")
     vintage_year: int = Field(description="Year the fund was established")
     target_size_usd: Decimal = Field(description="Target fundraising size in USD")
-    status: FundStatus = Field(description="Current fund status: Fundraising, Investing, or Closed")
+    status: FundStatus = Field(
+        description="Current fund status: Fundraising, Investing, or Closed"
+    )
     created_at: datetime = Field(description="Timestamp when the fund was created")
 
     model_config = ConfigDict(from_attributes=True)
@@ -35,16 +39,22 @@ class FundRead(BaseModel):
 
 class InvestorCreate(BaseModel):
     name: str = Field(description="Full name of the investor")
-    investor_type: InvestorType = Field(description="Type of investor (e.g. Individual, Institution)")
+    investor_type: InvestorType = Field(
+        description="Type of investor (e.g. Individual, Institution)"
+    )
     email: EmailStr = Field(description="Unique email address of the investor")
 
 
 class InvestorRead(BaseModel):
     id: UUID = Field(description="Unique identifier for the investor")
     name: str = Field(description="Full name of the investor")
-    investor_type: InvestorType = Field(description="Type of investor (e.g. Individual, Institution)")
+    investor_type: InvestorType = Field(
+        description="Type of investor (e.g. Individual, Institution)"
+    )
     email: EmailStr = Field(description="Email address of the investor")
-    created_at: datetime = Field(description="Timestamp when the investor was registered")
+    created_at: datetime = Field(
+        description="Timestamp when the investor was registered"
+    )
 
     model_config = ConfigDict(from_attributes=True)
 
