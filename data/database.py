@@ -11,7 +11,10 @@ from config import get_settings
 
 @lru_cache
 def get_engine() -> Engine:
-    return create_engine(get_settings().database_url)
+    url = get_settings().database_url
+    if not url:
+        raise RuntimeError("DATABASE_URL is not set")
+    return create_engine(url)
 
 
 def get_db() -> Generator[Session, None, None]:  # pragma: no cover

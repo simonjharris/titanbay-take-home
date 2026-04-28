@@ -1,4 +1,3 @@
-import os
 from typing import Generator
 
 import pytest
@@ -10,13 +9,11 @@ from alembic import command
 from alembic.config import Config
 from sqlalchemy_utils import create_database, database_exists  # type: ignore[import-untyped]
 
+from config import get_settings
 from data.database import get_db
 from main import app
 
-TEST_DATABASE_URL = os.getenv(
-    "TEST_DATABASE_URL",
-    "postgresql://titanbay:titanbay@localhost:5432/titanbay_test",
-)
+TEST_DATABASE_URL = get_settings().test_database_url
 
 
 @pytest.fixture(scope="session", autouse=True)

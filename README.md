@@ -68,7 +68,7 @@ Interactive docs available at:
 ---
 
 ## Testing
-Testing also requires a postgres database to be running with the 
+Testing also requires a postgres database to be running with the TEST_DATABASE_URL 
 
 ```shell
 uv run pytest --cov
