@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime, date
+from datetime import datetime, date, timezone
 from decimal import Decimal
 from sqlalchemy import func, UUID, ForeignKey
 from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped, relationship
@@ -13,7 +13,7 @@ class Base(DeclarativeBase):
     )
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
-        server_default=func.now(), onupdate=lambda _: datetime.utcnow()
+        server_default=func.now(), onupdate=lambda _: datetime.now(timezone.utc)
     )
 
 

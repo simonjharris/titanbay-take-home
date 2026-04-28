@@ -45,7 +45,7 @@ async def get_investments_for_fund(
     description=(
         "Records a new investment by an investor into the specified fund. "
         "Returns 404 if the fund or investor does not exist, "
-        "409 if the fund is not accepting investments or the investor has already invested."
+        "409 if the fund is not accepting investments."
     ),
     responses={**_404, **_409},
 )
