@@ -67,22 +67,8 @@ Interactive docs available at:
 
 ---
 
-## Project Structure
-
-```
-main.py              # FastAPI app, router registration
-rest/                # HTTP layer: request parsing, response codes
-business_logic/      # Domain logic
-data/
-  db_models.py       # SQLAlchemy ORM models
-  data_schemas.py    # Pydantic request/response schemas
-  types.py           # Enums (FundStatus, InvestorType)
-alembic/             # Database migrations
-```
-
----
-
 ## Testing
+Testing also requires a postgres database to be running with the 
 
 ```shell
 uv run pytest --cov

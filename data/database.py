@@ -1,17 +1,21 @@
 from collections.abc import Generator
+from functools import lru_cache
 from typing import Annotated
 
 from fastapi import Depends
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, Engine
 from sqlalchemy.orm import Session, sessionmaker
 
-from config import settings
+from config import get_settings
 
-engine = create_engine(settings.database_url)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+@lru_cache
+def get_engine() -> Engine:
+    return create_engine(get_settings().database_url)
 
 
 def get_db() -> Generator[Session, None, None]:  # pragma: no cover
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=get_engine())
     db = SessionLocal()
     try:
         yield db

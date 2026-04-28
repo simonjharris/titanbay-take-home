@@ -1,12 +1,3 @@
-# Fund
-# Field	Type	Description
-# id	string (uuid)	Unique identifier for the fund
-# name	string	Name of the fund
-# vintage_year	integer	Year the fund was established
-# target_size_usd	number (decimal)	Target size of the fund in USD
-# status	string	Fund status: Fundraising, Investing, or Closed
-# created_at	string (date-time)	Timestamp when the fund was created
-#
 from datetime import datetime, date
 from decimal import Decimal
 from uuid import UUID
