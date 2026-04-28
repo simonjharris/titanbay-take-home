@@ -69,6 +69,24 @@ Interactive docs available at:
 
 ## Formatting, Linting and Type Checking
 
+[uv](https://docs.astral.sh/uv/) is required for running the following commands.
+
+The following command will install the project dependencies.
+```shell
+uv sync
+```
+
+Ruff is used for both formatting and linting.
+```shell
+uv run ruff format .
+uv run ruff check .
+```
+
+Mypy is used for type checking, with strict mode enabled.
+
+```shell
+uv run mypy .
+```
 
 ## Testing
 Testing also requires a postgres database to be running with the TEST_DATABASE_URL environment set. This has a default set in `config.py` which may or may not be appropriate depending on how the database is running. This can be overridden in a `.env` file as per the `.env.example`.
