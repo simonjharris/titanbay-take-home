@@ -17,6 +17,7 @@ docker compose up
 - Starts API on `http://localhost:8000` and PostgreSQL on `5432`
 - Migrations run automatically on container start
 - No manual setup required
+- No seed data is provided, but the `POST /funds`, `POST /investors`, and `POST /funds/{fund_id}/investments` endpoints can be used to create test data, or interact via the Swagger UI at `http://localhost:8000/docs`. Data will persist in the database between runs. Tests create their own ephemeral data against a separate test database and clean up after themselves.
 
 ---
 
@@ -26,10 +27,10 @@ Using docker compose is the recommended way to run this, but if you wish to run 
 
 The app requires a postgres database running. If you don't have a suitable one set up, you can run `docker compose up database` to run only the postgres container.
 
-The `DATABASE_URL` environment variable must then be configured. This can also be set with a `.env` file in the project root.
-
+The `DATABASE_URL` environment variable must then be configured. Copy `.env.example` to `.env` and adjust as needed, or export it directly.
 
 ```shell
+cp .env.example .env
 uv sync
 export DATABASE_URL=postgresql://titanbay:titanbay@localhost:5432/titanbay
 uv run alembic upgrade head
@@ -45,11 +46,13 @@ uv run uvicorn main:app --reload
 | `GET` | `/funds` | List all funds |
 | `GET` | `/funds/{fund_id}` | Get fund by ID |
 | `POST` | `/funds` | Create a fund |
-| `PUT` | `/funds` | Update a fund |
+| `PUT` | `/funds` | Update a fund (ID in request body, per spec — see note below) |
 | `GET` | `/investors` | List all investors |
 | `POST` | `/investors` | Create an investor |
 | `GET` | `/funds/{fund_id}/investments` | List investments for a fund |
 | `POST` | `/funds/{fund_id}/investments` | Create an investment |
+
+> **Note on `PUT /funds`:** The spec places the fund `id` in the request body rather than the path. This is non-standard — a more conventional design would be `PUT /funds/{fund_id}` — but the spec was followed as-is.
 
 Full schema: [API spec](https://storage.googleapis.com/interview-api-doc-funds.wearebusy.engineering/index.html)
 
@@ -63,7 +66,19 @@ Interactive docs available at:
 
 - **Fund** — `name`, `vintage_year`, `target_size_usd`, `status` (`Fundraising` | `Investing` | `Closed`)
 - **Investor** — `name`, `investor_type` (`Individual` | `Institution` | `FamilyOffice`), `email` (unique)
-- **Investment** — joins Fund and Investor; `amount_usd`, `investment_date`; one investment per investor per fund (enforced)
+- **Investment** — joins Fund and Investor; `amount_usd`, `investment_date`; 
+
+---
+
+## Error Handling
+
+| Status | When                                                                             |
+|--------|----------------------------------------------------------------------------------|
+| `201 Created` | Successful resource creation                                                     |
+| `400 Bad Request` | Business rule violation (e.g. investing in a non-Fundraising fund)               |
+| `404 Not Found` | Resource with given ID does not exist                                            |
+| `409 Conflict` | Application or database constraint violation (e.g. investor with existing email) |
+| `422 Unprocessable Entity` | Request body fails input validation (missing fields, wrong types, etc.)          |
 
 ---
 
@@ -97,6 +112,7 @@ uv run pytest --cov
 
 ---
 
+
 ## Design Decisions & Assumptions
 
 Data models and routes were set up according to the provided [api spec](https://storage.googleapis.com/interview-api-doc-funds.wearebusy.engineering/index.html).
@@ -116,3 +132,5 @@ The general project outline and endpoint stubs were created by hand using previo
 
 Most of the business logic was written by AI, with a few iterations around better controlling the database transaction through the HTTP request lifecycle. 
 Most of the tests were written by AI, after a few written by hand as a template.
+
+AI was then used to review the project and find any bugs: one found (see commit `a0eb88cc`).
