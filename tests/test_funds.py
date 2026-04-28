@@ -101,6 +101,12 @@ def test_update_fund(test_client: TestClient, database_session: Session) -> None
     assert data["name"] == "New Name"
     assert data["status"] == FundStatus.INVESTING
 
+    # ensure database updated as expected
+    updated_fund = database_session.get(Fund, fund_id)
+    assert updated_fund.name == "New Name"
+    assert updated_fund.created_at != updated_fund.updated_at
+
+
 
 def test_update_fund_not_found_returns_404(test_client: TestClient) -> None:
     payload = FundUpdate(
