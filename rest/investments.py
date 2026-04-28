@@ -11,13 +11,14 @@ import business_logic.investments as investment_logic
 
 investments_router = APIRouter(tags=["investments"])
 
-_404: dict[int | str, dict[str, Any]] = {404: {"model": ErrorDetail, "description": "Fund or investor not found"}}
+_404: dict[int | str, dict[str, Any]] = {
+    404: {"model": ErrorDetail, "description": "Fund or investor not found"}
+}
 _409: dict[int | str, dict[str, Any]] = {
     409: {
         "model": ErrorDetail,
         "description": (
             "Conflict: either the fund is not currently accepting investments "
-            "(status is not Fundraising), or this investor has already invested in the fund"
         ),
     }
 }

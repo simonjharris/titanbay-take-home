@@ -75,7 +75,6 @@ Interactive docs available at:
 | Status | When                                                                             |
 |--------|----------------------------------------------------------------------------------|
 | `201 Created` | Successful resource creation                                                     |
-| `400 Bad Request` | Business rule violation (e.g. investing in a non-Fundraising fund)               |
 | `404 Not Found` | Resource with given ID does not exist                                            |
 | `409 Conflict` | Application or database constraint violation (e.g. investor with existing email) |
 | `422 Unprocessable Entity` | Request body fails input validation (missing fields, wrong types, etc.)          |
